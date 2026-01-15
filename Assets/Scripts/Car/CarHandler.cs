@@ -3,6 +3,11 @@ using UnityEngine;
 public class CarHandler : MonoBehaviour
 {
     [SerializeField] Rigidbody rb;
+    [SerializeField] Transform gameModel;
+
+    //Max values
+    private float maxSteerVelocity = 2;
+    private float maxForwardVelocity = 30;
 
     //Multiplyers
     private float accelerationMultiplyer = 3;
@@ -11,6 +16,12 @@ public class CarHandler : MonoBehaviour
 
     //Input 
     Vector2 input = Vector2.zero;
+
+    private void Update()
+    {
+        //Rotate the model when turning
+        gameModel.transform.rotation = Quaternion.Euler(0, rb.linearVelocity.x * 5, 0);
+    }
 
     private void FixedUpdate()
     {
@@ -24,12 +35,17 @@ public class CarHandler : MonoBehaviour
         
 
         Steer();
+
+        //Car never goes backwards
+        if (rb.linearVelocity.z <= 0)
+            rb.linearVelocity = Vector3.zero;
     }
     private void Accelerate()
     {
         rb.linearDamping = 0;
 
-        rb.AddForce(rb.transform.forward * accelerationMultiplyer * input.y);
+        if(rb.linearVelocity.x <= maxForwardVelocity)
+            rb.AddForce(rb.transform.forward * accelerationMultiplyer * input.y);
     }
 
     private void Brake()
@@ -44,7 +60,23 @@ public class CarHandler : MonoBehaviour
     {
         if(Mathf.Abs(input.x) > 0)
         {
-            rb.AddForce(rb.transform.right * steeringInputMultiplyer * input.x);
+            //Move car sideways
+            float speedBaseSteeringLimit = rb.linearVelocity.z / 5.0f;
+            speedBaseSteeringLimit = Mathf.Clamp01(speedBaseSteeringLimit);
+
+            rb.AddForce(rb.transform.right * steeringInputMultiplyer * input.x * speedBaseSteeringLimit);
+
+            //Normalize x velocity
+            float normalizedX = rb.linearVelocity.x / maxSteerVelocity;
+            normalizedX = Mathf.Clamp(normalizedX, -1.0f, 1.0f);
+
+            //Turn speed limits
+            rb.linearVelocity = new Vector3(normalizedX * maxSteerVelocity, 0, rb.linearVelocity.z);
+        }
+        else
+        {
+            //Autocenter the car
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, new Vector3(0, 0, rb.linearVelocity.z), Time.fixedDeltaTime * 3);
         }
     }
 
