@@ -55,5 +55,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2c4742f9fa652b546b5d514f75174e61, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7974318411675474930}
   m_SourcePrefab: {fileID: 100100000, guid: 2c4742f9fa652b546b5d514f75174e61, type: 3}
+--- !u!1 &5010766987937734417 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2c4742f9fa652b546b5d514f75174e61, type: 3}
+  m_PrefabInstance: {fileID: 5280677094719054400}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7974318411675474930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5010766987937734417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebe387427d5d2ff4db553ff1895a88e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RandomizeObject
+  localRotMin: {x: -10, y: 0, z: -10}
+  localRotMax: {x: 10, y: 360, z: 10}
+  localScaleMultMin: 0.8
+  localScaleMultMax: 1.5
