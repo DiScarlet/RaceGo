@@ -492,10 +492,10 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.5
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -529,7 +529,7 @@ Light:
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 5000
+  m_ColorTemperature: 4055
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
@@ -630,6 +630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarHandler
   rb: {fileID: 499139640}
   gameModel: {fileID: 1244444281}
+  carMeshRenderer: {fileID: 1632743315}
 --- !u!54 &499139640
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -706,7 +707,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 405017776ed47db499f88f122908129a, type: 2}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
@@ -802,6 +803,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 47c5dea1830609f4eaceba154deec0e7, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8b53c45c35725b24e91d5db6260d5658, type: 2}
     - target: {fileID: 919132149155446097, guid: 47c5dea1830609f4eaceba154deec0e7, type: 3}
       propertyPath: m_Name
       value: car_taxi
@@ -846,6 +851,11 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 8750179691983508878, guid: 47c5dea1830609f4eaceba154deec0e7, type: 3}
+--- !u!23 &1632743315 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 47c5dea1830609f4eaceba154deec0e7, type: 3}
+  m_PrefabInstance: {fileID: 1632743311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

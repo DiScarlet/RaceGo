@@ -4,23 +4,41 @@ public class CarHandler : MonoBehaviour
 {
     [SerializeField] Rigidbody rb;
     [SerializeField] Transform gameModel;
+    [SerializeField] MeshRenderer carMeshRenderer;
 
     //Max values
     private float maxSteerVelocity = 2;
     private float maxForwardVelocity = 30;
 
     //Multiplyers
-    private float accelerationMultiplyer = 3;
-    private float breakMultiplyer = 15;
-    private float steeringInputMultiplyer = 5;
+    private float accelerationMultiplier = 3;
+    private float brakingMultiplier = 15;
+    private float steeringPowerMultiplier = 5;
 
     //Input 
-    Vector2 input = Vector2.zero;
+    private Vector2 input = Vector2.zero;
+
+    //Emissive property
+    private int _EmissionColor = Shader.PropertyToID("_EmissionColor");
+    Color emissiveColor = Color.red;
+    float emisiveColorMultiplier = 0f;
 
     private void Update()
     {
         //Rotate the model when turning
         gameModel.transform.rotation = Quaternion.Euler(0, rb.linearVelocity.x * 5, 0);
+
+        if(carMeshRenderer != null)
+        {
+            float desiredCarEmissiveMyltipler = 0f;
+
+            if (input.y <= 0)
+                desiredCarEmissiveMyltipler = 4.0f;
+
+            emisiveColorMultiplier = Mathf.Lerp(emisiveColorMultiplier, desiredCarEmissiveMyltipler, Time.deltaTime * 4);
+
+            carMeshRenderer.material.SetColor(_EmissionColor, emissiveColor * emisiveColorMultiplier);
+        }
     }
 
     private void FixedUpdate()
@@ -45,7 +63,7 @@ public class CarHandler : MonoBehaviour
         rb.linearDamping = 0;
 
         if(rb.linearVelocity.x <= maxForwardVelocity)
-            rb.AddForce(rb.transform.forward * accelerationMultiplyer * input.y);
+            rb.AddForce(rb.transform.forward * accelerationMultiplier * input.y);
     }
 
     private void Brake()
@@ -53,7 +71,7 @@ public class CarHandler : MonoBehaviour
         if (rb.linearVelocity.z <= 0)
             return;
 
-        rb.AddForce(rb.transform.forward * breakMultiplyer * input.y);
+        rb.AddForce(rb.transform.forward * brakingMultiplier * input.y);
     }
 
     private void Steer()
@@ -64,7 +82,7 @@ public class CarHandler : MonoBehaviour
             float speedBaseSteeringLimit = rb.linearVelocity.z / 5.0f;
             speedBaseSteeringLimit = Mathf.Clamp01(speedBaseSteeringLimit);
 
-            rb.AddForce(rb.transform.right * steeringInputMultiplyer * input.x * speedBaseSteeringLimit);
+            rb.AddForce(rb.transform.right * steeringPowerMultiplier * input.x * speedBaseSteeringLimit);
 
             //Normalize x velocity
             float normalizedX = rb.linearVelocity.x / maxSteerVelocity;
