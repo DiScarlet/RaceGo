@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CarHandler : MonoBehaviour
@@ -5,6 +6,7 @@ public class CarHandler : MonoBehaviour
     [SerializeField] Rigidbody rb;
     [SerializeField] Transform gameModel;
     [SerializeField] MeshRenderer carMeshRenderer;
+    [SerializeField] ExplodeHandler explodeHandler;
 
     //Max values
     private float maxSteerVelocity = 2;
@@ -20,13 +22,20 @@ public class CarHandler : MonoBehaviour
 
     //Emissive property
     private int _EmissionColor = Shader.PropertyToID("_EmissionColor");
-    Color emissiveColor = Color.red;
-    float emisiveColorMultiplier = 0f;
+    private Color emissiveColor = Color.red;
+    private float emisiveColorMultiplier = 0f;
+
+    //Exploded state
+    private bool isExploded = false;
 
     private void Update()
     {
-        //Rotate the model when turning
-        gameModel.transform.rotation = Quaternion.Euler(0, rb.linearVelocity.x * 5, 0);
+        //Check if exploded
+        if (isExploded)
+            return;
+
+            //Rotate the model when turning
+            gameModel.transform.rotation = Quaternion.Euler(0, rb.linearVelocity.x * 5, 0);
 
         if(carMeshRenderer != null)
         {
@@ -43,6 +52,18 @@ public class CarHandler : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //Check if exploded
+        if (isExploded)
+        {
+            rb.linearDamping = rb.linearVelocity.z * 0.1f;
+            rb.linearDamping = Mathf.Clamp(rb.linearDamping, 1.5f, 10);
+
+            //Move away from where exploded
+            rb.MovePosition(Vector3.Lerp(transform.position, new Vector3(0, 0, transform.position.z), Time.deltaTime * 0.5f));
+
+            return;
+        }
+
         if (input.y > 0)
             Accelerate();
         else
@@ -103,5 +124,36 @@ public class CarHandler : MonoBehaviour
         inputVector.Normalize();
 
         input = inputVector;
+    }
+
+    IEnumerator SlowDownTimeCO()
+    {
+        while (Time.timeScale > 0.4f)
+        {
+            Time.timeScale -= Time.deltaTime * 2;
+
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.5f);
+
+        while (Time.timeScale <= 1.0f)
+        {
+            Time.timeScale += Time.deltaTime;
+
+            yield return null;
+        }
+
+        Time.timeScale = 1.0f;
+    }
+
+    //Events
+    private void OnCollisionEnter(Collision collision)
+    {
+        Vector3 velocity = rb.linearVelocity;
+        explodeHandler.Explode(velocity * 45);
+
+        isExploded = true;
+
+        StartCoroutine(SlowDownTimeCO());
     }
 }
