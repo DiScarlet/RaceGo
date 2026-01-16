@@ -28,6 +28,13 @@ public class CarHandler : MonoBehaviour
     //Exploded state
     private bool isExploded = false;
 
+    private bool isPlayer = true;
+
+    private void Start()
+    {
+        isPlayer = CompareTag("Player");
+    }
+
     private void Update()
     {
         //Check if exploded
@@ -126,6 +133,11 @@ public class CarHandler : MonoBehaviour
         input = inputVector;
     }
 
+    public void SetMaxSpeed(float newMaxSpeed)
+    {
+        maxForwardVelocity = newMaxSpeed;
+    }
+
     IEnumerator SlowDownTimeCO()
     {
         while (Time.timeScale > 0.4f)
@@ -149,6 +161,15 @@ public class CarHandler : MonoBehaviour
     //Events
     private void OnCollisionEnter(Collision collision)
     {
+        //NPC only explode when hit by player or car part
+        if(!isPlayer)
+        {
+            if (collision.transform.root.CompareTag("Untagged"))
+                return;
+
+            if (collision.transform.root.CompareTag("CarNPC"))
+                return;
+        }
         Vector3 velocity = rb.linearVelocity;
         explodeHandler.Explode(velocity * 45);
 
