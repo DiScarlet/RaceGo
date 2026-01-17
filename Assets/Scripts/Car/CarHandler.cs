@@ -37,12 +37,19 @@ public class CarHandler : MonoBehaviour
 
     private bool isPlayer = true;
 
+    //Stats
+    private float carStartPositionZ;
+    private float distanceTravelled = 0;
+    public float DistanceTravelled => distanceTravelled;
+
     private void Start()
     {
         isPlayer = CompareTag("Player");
 
         if (isPlayer)
             carEngineAS.Play();
+
+        carStartPositionZ = transform.position.z;
     }
 
     private void Update()
@@ -70,6 +77,9 @@ public class CarHandler : MonoBehaviour
         }
 
         UpdateCarAudio();
+
+        //Update distance travelled
+        distanceTravelled = transform.position.z - carStartPositionZ;
     }
 
     private void FixedUpdate()
