@@ -472,6 +472,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCCarSpawner
   carNpcPrefabs:
   - {fileID: 5478755152567995330, guid: 9025b38f095915b40aa4a5f14959d364, type: 3}
+  otherCarsLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,7 +26,12 @@ namespace Assets.Scripts.Car
             carHandler.SetInput(input);
 
             if (Input.GetKeyDown(KeyCode.R))
+            {
+                //Restore timescale
+                Time.timeScale = 1.0f;
+
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
     }
 }

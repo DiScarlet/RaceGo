@@ -9,6 +9,12 @@ public class ExplodeHandler : MonoBehaviour
 
     private void Awake()
     {
+        if (model == null)
+        {
+            Debug.LogError($"ExplodeHandler missing model on {name}", this);
+            return;
+        }
+
         rigidbodies = model.GetComponentsInChildren<Rigidbody>(true);
     }
 

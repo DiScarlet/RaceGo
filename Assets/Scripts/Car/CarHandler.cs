@@ -8,9 +8,16 @@ public class CarHandler : MonoBehaviour
     [SerializeField] MeshRenderer carMeshRenderer;
     [SerializeField] ExplodeHandler explodeHandler;
 
+    [Header("SFX")]
+    [SerializeField] AudioSource carEngineAS;
+    [SerializeField] AnimationCurve carPitchAnimationCurve;
+    [SerializeField] AudioSource carSkidAS;
+    [SerializeField] AudioSource carCrashAS;
+
     //Max values
     private float maxSteerVelocity = 2;
     private float maxForwardVelocity = 30;
+    private float carMaxSpeedPercentage = 0;
 
     //Multiplyers
     private float accelerationMultiplier = 3;
@@ -33,13 +40,19 @@ public class CarHandler : MonoBehaviour
     private void Start()
     {
         isPlayer = CompareTag("Player");
+
+        if (isPlayer)
+            carEngineAS.Play();
     }
 
     private void Update()
     {
         //Check if exploded
         if (isExploded)
+        {
+            FadeOutCarAudio();
             return;
+        }
 
             //Rotate the model when turning
             gameModel.transform.rotation = Quaternion.Euler(0, rb.linearVelocity.x * 5, 0);
@@ -55,6 +68,8 @@ public class CarHandler : MonoBehaviour
 
             carMeshRenderer.material.SetColor(_EmissionColor, emissiveColor * emisiveColorMultiplier);
         }
+
+        UpdateCarAudio();
     }
 
     private void FixedUpdate()
@@ -126,6 +141,38 @@ public class CarHandler : MonoBehaviour
         }
     }
 
+    private void UpdateCarAudio()
+    {
+        if (!isPlayer)
+            return;
+
+        carMaxSpeedPercentage = rb.linearVelocity.z / maxForwardVelocity;
+
+        carEngineAS.pitch = carPitchAnimationCurve.Evaluate(carMaxSpeedPercentage);
+
+        if (input.y < 0 && carMaxSpeedPercentage > 0.2f)
+        {
+            if (!carSkidAS.isPlaying)
+            {
+                carSkidAS.Play();
+            }
+
+            carSkidAS.volume = Mathf.Lerp(carSkidAS.volume, 1.0f, Time.deltaTime * 10);
+        }
+        else
+        {
+            carSkidAS.volume = Mathf.Lerp(carSkidAS.volume, 0.0f, Time.deltaTime * 10);
+        }
+    }
+    private void FadeOutCarAudio()
+    {
+        if (!isPlayer)
+            return;
+
+        carEngineAS.volume = Mathf.Lerp(carEngineAS.volume, 0, Time.deltaTime * 10);
+        carSkidAS.volume = Mathf.Lerp(carSkidAS.volume, 0.0f, Time.deltaTime * 10);
+    }
+
     public void SetInput(Vector2 inputVector)
     {
         inputVector.Normalize();
@@ -174,6 +221,15 @@ public class CarHandler : MonoBehaviour
         explodeHandler.Explode(velocity * 45);
 
         isExploded = true;
+
+
+        carCrashAS.volume = carMaxSpeedPercentage;
+        carCrashAS.volume = Mathf.Clamp(carCrashAS.volume, 0.25f, 1.0f);
+
+        carCrashAS.pitch = carMaxSpeedPercentage;
+        carCrashAS.pitch = Mathf.Clamp(carCrashAS.volume, 0.3f, 1.0f);
+
+        carCrashAS.Play();
 
         StartCoroutine(SlowDownTimeCO());
     }

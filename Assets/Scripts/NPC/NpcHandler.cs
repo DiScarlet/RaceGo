@@ -10,6 +10,10 @@ public class NpcHamdler : MonoBehaviour
     [SerializeField] MeshCollider meshCollider;
     private RaycastHit[] raycastHits = new RaycastHit[1];
     private bool isCarAhead = false;
+    private float carAheadDistance = 0;
+
+    [Header("SFX")]
+    [SerializeField] AudioSource honkHornAS;
 
     //Timing
     WaitForSeconds wait = new WaitForSeconds(0.2f);
@@ -39,7 +43,15 @@ public class NpcHamdler : MonoBehaviour
         float steeringInput = 0.0f;
 
         if (isCarAhead)
+        {
             accelerationInput = -1;
+
+            if(carAheadDistance < 10 && !honkHornAS.isPlaying)
+            {
+                honkHornAS.pitch = Random.Range(0.5f, 1.1f);
+                honkHornAS.Play();
+            }
+        }
 
         float desiredPositionX = Utils.CarLanes[drivingInLane];
         float difference = desiredPositionX - transform.position.x;
@@ -70,7 +82,10 @@ public class NpcHamdler : MonoBehaviour
         meshCollider.enabled = true;
 
         if (numbOfHits > 0)
+        {
+            carAheadDistance = (transform.position - raycastHits[0].point).magnitude;
             return true;
+        }
         else
             return false;
     }
