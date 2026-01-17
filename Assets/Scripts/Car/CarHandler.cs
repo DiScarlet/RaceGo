@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -41,6 +42,10 @@ public class CarHandler : MonoBehaviour
     private float carStartPositionZ;
     private float distanceTravelled = 0;
     public float DistanceTravelled => distanceTravelled;
+
+    //Events
+    public event Action<CarHandler> OnPlayerCrashed;
+
 
     private void Start()
     {
@@ -240,6 +245,9 @@ public class CarHandler : MonoBehaviour
         carCrashAS.pitch = Mathf.Clamp(carCrashAS.volume, 0.3f, 1.0f);
 
         carCrashAS.Play();
+
+        //Trigger crash action
+        OnPlayerCrashed?.Invoke(this);
 
         StartCoroutine(SlowDownTimeCO());
     }
