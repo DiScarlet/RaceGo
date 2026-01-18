@@ -35,10 +35,12 @@ public class UIHandler : MonoBehaviour
         yield return new WaitForSecondsRealtime(3.0f);
 
         gameOverCanvasGroup.interactable = true;
+        gameOverCanvasGroup.blocksRaycasts = true;
 
-        while(gameOverCanvasGroup.alpha < 0.8f)
+        while (gameOverCanvasGroup.alpha < 0.8f)
         {
-            gameOverCanvasGroup.alpha = Mathf.MoveTowards(gameOverCanvasGroup.alpha, 1.0f, Time.deltaTime * 2);
+            gameOverCanvasGroup.alpha = Mathf.MoveTowards(gameOverCanvasGroup.alpha, 1.0f, Time.unscaledDeltaTime * 2);
+
 
             yield return null;
         }
@@ -56,6 +58,8 @@ public class UIHandler : MonoBehaviour
     {
         //Restore time scale
         Time.timeScale = 1.0f;
+        gameOverCanvasGroup.blocksRaycasts = false;
+
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

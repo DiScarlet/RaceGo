@@ -98,5 +98,12 @@ public class NpcHamdler : MonoBehaviour
 
         //Set random lane
         drivingInLane = Random.Range(0, Utils.CarLanes.Length);
+
+        // **Reset Z relative to player**
+        Transform playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        Vector3 pos = transform.position;
+        pos.x = Utils.CarLanes[drivingInLane];
+        pos.z = playerTransform.position.z + UnityEngine.Random.Range(20f, 50f); // spawn 20–50 units ahead
+        transform.position = pos;
     }
 }

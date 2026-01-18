@@ -246,6 +246,7 @@ public class CarHandler : MonoBehaviour
 
         carCrashAS.Play();
 
+        Debug.Log("PLAYER CRASHED!!");
         //Trigger crash action
         OnPlayerCrashed?.Invoke(this);
 

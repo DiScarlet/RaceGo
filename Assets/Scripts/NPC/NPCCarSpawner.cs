@@ -67,7 +67,7 @@ public class NPCCarSpawner : MonoBehaviour
 
         if (carToSpawn == null)
             return;
-        Vector3 spawnPosition = new Vector3(0, 0, playerCarTransform.position.z + 100);
+        Vector3 spawnPosition = new Vector3(0, 0, playerCarTransform.position.z + 40);
 
         if (Physics.OverlapBoxNonAlloc(spawnPosition, Vector3.one * 2, overlappedCheckCollider, Quaternion.identity, otherCarsLayerMask) > 0)
             return;
