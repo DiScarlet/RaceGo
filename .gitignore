@@ -47,3 +47,20 @@ sysinfo.txt
 .vs/
 .idea/
 *.sln.iml
+
+# Blender
+*.blend
+*.blend1
+
+# Unity
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+/Models/
+
+# OS
+.DS_Store
+Thumbs.db
