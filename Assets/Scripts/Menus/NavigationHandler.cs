@@ -2,13 +2,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using static UnityEngine.SceneManagement.SceneManager;
 
-public class MainMenuHandler : MonoBehaviour
+public class NavigationHandler : MonoBehaviour
 {
     [SerializeField] private TransitionHandler transitionHandler;
 
     private const string fullStartScene = "IntroScene"; 
     private const string quickStartScene = "Stage";
     private const string settingsScene = "Settings";
+    private const string mainMenuScene = "Main Menu";
+
 
     public void OnFullStartClick()
     {
@@ -24,6 +26,11 @@ public class MainMenuHandler : MonoBehaviour
     {
         transitionHandler.LoadNextScene(settingsScene);
     }
+    public void OnMainMenuClick()
+    {
+        transitionHandler.LoadNextScene(mainMenuScene);
+    }
+
 
     public void OnQuitClick()
     {
