@@ -1,20 +1,18 @@
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class VolumeHandler : MonoBehaviour
 {
-    [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private Slider musicSlider;
 
     private void Start()
     {
-        SetMusicVolume();
+        musicSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
+        OnMusicVolumeChanged(musicSlider.value);
     }
 
-    public void SetMusicVolume()
+    public void OnMusicVolumeChanged(float value)
     {
-        float volume = musicSlider.value;
-        audioMixer.SetFloat("music", Mathf.Log10(volume) * 20);
+        AudioManager.Instance.SetMusicVolume(value);
     }
 }

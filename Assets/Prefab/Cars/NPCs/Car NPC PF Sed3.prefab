@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 177136037513434837, guid: 433511966129fcd45a5f82790fcb6611, type: 3}
       propertyPath: meshCollider
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2447266388517006040}
     - target: {fileID: 481111363186607657, guid: 433511966129fcd45a5f82790fcb6611, type: 3}
       propertyPath: m_Name
       value: Car NPC PF Sed3

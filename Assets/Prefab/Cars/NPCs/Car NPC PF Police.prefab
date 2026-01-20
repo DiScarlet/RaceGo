@@ -15,7 +15,7 @@ PrefabInstance:
     - target: {fileID: 5246802131467688766, guid: 9025b38f095915b40aa4a5f14959d364, type: 3}
       propertyPath: meshCollider
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2338373755979056981}
     - target: {fileID: 5478755152567995330, guid: 9025b38f095915b40aa4a5f14959d364, type: 3}
       propertyPath: m_Name
       value: Car NPC PF Police
