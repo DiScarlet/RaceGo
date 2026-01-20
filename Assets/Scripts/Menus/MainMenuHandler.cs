@@ -4,23 +4,25 @@ using static UnityEngine.SceneManagement.SceneManager;
 
 public class MainMenuHandler : MonoBehaviour
 {
-    private const string fullStartScene = "StoryScene"; 
+    [SerializeField] private TransitionHandler transitionHandler;
+
+    private const string fullStartScene = "IntroScene"; 
     private const string quickStartScene = "Stage";
     private const string settingsScene = "Settings";
 
     public void OnFullStartClick()
     {
-        LoadScene(fullStartScene);
+        transitionHandler.LoadNextScene(fullStartScene);
     }
 
     public void OnQuickStartClick()
     {
-        LoadScene(quickStartScene);
+        transitionHandler.LoadNextScene(quickStartScene);
     }
 
     public void OnSettingsClick()
     {
-        LoadScene(settingsScene);
+        transitionHandler.LoadNextScene(settingsScene);
     }
 
     public void OnQuitClick()
