@@ -129,7 +129,7 @@ public class CarHandler : MonoBehaviour
         if (rb.linearVelocity.z <= 0)
             return;
 
-        rb.AddForce(rb.transform.forward * brakingMultiplier * input.y);
+        rb.AddForce(brakingMultiplier * input.y * rb.transform.forward);
     }
 
     private void Steer()
@@ -140,7 +140,7 @@ public class CarHandler : MonoBehaviour
             float speedBaseSteeringLimit = rb.linearVelocity.z / 5.0f;
             speedBaseSteeringLimit = Mathf.Clamp01(speedBaseSteeringLimit);
 
-            rb.AddForce(rb.transform.right * steeringPowerMultiplier * input.x * speedBaseSteeringLimit);
+            rb.AddForce(input.x * speedBaseSteeringLimit * steeringPowerMultiplier * rb.transform.right);
 
             //Normalize x velocity
             float normalizedX = rb.linearVelocity.x / maxSteerVelocity;
