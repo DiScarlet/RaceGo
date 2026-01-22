@@ -121,7 +121,7 @@ public class CarHandler : MonoBehaviour
         rb.linearDamping = 0;
 
         if(rb.linearVelocity.x <= maxForwardVelocity)
-            rb.AddForce(rb.transform.forward * accelerationMultiplier * input.y);
+            rb.AddForce(accelerationMultiplier * input.y * rb.transform.forward);
     }
 
     private void Brake()

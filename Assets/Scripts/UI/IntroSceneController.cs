@@ -14,10 +14,9 @@ public class IntroSceneController : MonoBehaviour
     [SerializeField] private float visibleTime = 1.5f;
     [SerializeField] private float fadeOutTime = 1f;
 
-    [Header("Next Scene")]
-    [SerializeField] private string nextSceneName = "Stage";
+    [SerializeField] private IntroFlowController introFlowController;
 
-    private readonly string[] storyLines =
+    /*private readonly string[] storyLines =
     {
         "You are a professional racing driver.",
         "The Grand Prix is over, but the journey home has just begun.",
@@ -28,6 +27,12 @@ public class IntroSceneController : MonoBehaviour
         "The road never ends.",
         "One mistake ends the journey.",
         "How far can you drive before the streets claim the car?"
+    };*/
+    private readonly string[] storyLines =
+    {
+        "You are a professional racing driver.",
+        "The Grand Prix is over, but the journey home has just begun.",
+        
     };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -47,7 +52,7 @@ public class IntroSceneController : MonoBehaviour
             yield return new WaitForSeconds(visibleTime);
             yield return Fade(1f, 0f, fadeOutTime);
         }
-        SceneManager.LoadScene(nextSceneName);
+        introFlowController.OnTextFinished();
     }
 
     private IEnumerator Fade(float from, float to, float duration)

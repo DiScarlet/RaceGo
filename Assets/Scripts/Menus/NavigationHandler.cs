@@ -11,6 +11,11 @@ public class NavigationHandler : MonoBehaviour
     private const string settingsScene = "Settings";
     private const string mainMenuScene = "Main Menu";
 
+    private void Awake()
+    {
+        UIHandler.MainMenuClicked += OnMainMenuClick;
+        UIHandler.RestartClicked += OnQuickStartClick;
+    }
 
     public void OnFullStartClick()
     {

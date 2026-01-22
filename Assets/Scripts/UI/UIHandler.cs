@@ -2,12 +2,15 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
 
 public class UIHandler : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI distanceTraveledText;
     [SerializeField] private TextMeshProUGUI gameOverText;
     [SerializeField] private CanvasGroup gameOverCanvasGroup;
+    public static Action MainMenuClicked;
+    public static Action RestartClicked;
 
     private CarHandler playerCarHandler;
 
@@ -60,7 +63,15 @@ public class UIHandler : MonoBehaviour
         Time.timeScale = 1.0f;
         gameOverCanvasGroup.blocksRaycasts = false;
 
+        RestartClicked?.Invoke();
+    }
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    public void OnMainMenuClicked()
+    {
+        //Restore time scale
+        Time.timeScale = 1.0f;
+        gameOverCanvasGroup.blocksRaycasts = false;
+
+        MainMenuClicked?.Invoke();
     }
 }
