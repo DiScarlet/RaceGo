@@ -36,6 +36,71 @@ Transform:
   - {fileID: 7196726178475176885}
   m_Father: {fileID: 3654454472467753469}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6142658487249333918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7368965313205923014}
+  - component: {fileID: 4762635456451329397}
+  m_Layer: 0
+  m_Name: Reflection Probe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7368965313205923014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6142658487249333918}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.6185484, y: 0.4, z: -6.2984467}
+  m_LocalScale: {x: 100, y: 50, z: 25}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 3654454472467753469}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!215 &4762635456451329397
+ReflectionProbe:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6142658487249333918}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Type: 0
+  m_Mode: 0
+  m_RefreshMode: 0
+  m_TimeSlicingMode: 0
+  m_Resolution: 128
+  m_UpdateFrequency: 0
+  m_BoxSize: {x: 30, y: 10, z: 50}
+  m_BoxOffset: {x: 0, y: 0, z: 0}
+  m_NearClip: 0.3
+  m_FarClip: 1000
+  m_ShadowDistance: 100
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.03402629, g: 0.47151056, b: 0.6679245, a: 0}
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IntensityMultiplier: 1
+  m_BlendDistance: 1
+  m_HDR: 1
+  m_BoxProjection: 0
+  m_RenderDynamicObjects: 0
+  m_UseOcclusionCulling: 1
+  m_Importance: 1
+  m_CustomBakedTexture: {fileID: 0}
 --- !u!1001 &64608024699398101
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -604,7 +669,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1060905822236117222, guid: 75e38fe3554abf94bbba2bb0416d0bfa, type: 3}
       propertyPath: m_Name
-      value: Endless Section Base PF Variant
+      value: Endless Section PF Random 2
       objectReference: {fileID: 0}
     - target: {fileID: 1829136156922794768, guid: 75e38fe3554abf94bbba2bb0416d0bfa, type: 3}
       propertyPath: m_LocalPosition.x
@@ -653,6 +718,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1829136156922794768, guid: 75e38fe3554abf94bbba2bb0416d0bfa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2586521333033806323}
+    - targetCorrespondingSourceObject: {fileID: 1829136156922794768, guid: 75e38fe3554abf94bbba2bb0416d0bfa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7368965313205923014}
     - targetCorrespondingSourceObject: {fileID: 7813177615728265590, guid: 75e38fe3554abf94bbba2bb0416d0bfa, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8156380847215511718}

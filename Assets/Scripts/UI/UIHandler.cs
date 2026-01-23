@@ -40,7 +40,7 @@ public class UIHandler : MonoBehaviour
         gameOverCanvasGroup.interactable = true;
         gameOverCanvasGroup.blocksRaycasts = true;
 
-        while (gameOverCanvasGroup.alpha < 0.8f)
+        while (gameOverCanvasGroup.alpha < 0.98f)
         {
             gameOverCanvasGroup.alpha = Mathf.MoveTowards(gameOverCanvasGroup.alpha, 1.0f, Time.unscaledDeltaTime * 2);
 
