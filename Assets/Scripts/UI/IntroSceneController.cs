@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class IntroSceneController : MonoBehaviour
 {
@@ -16,7 +15,21 @@ public class IntroSceneController : MonoBehaviour
 
     [SerializeField] private IntroFlowController introFlowController;
 
-    /*private readonly string[] storyLines =
+
+    private readonly string[] storyLines1 =
+    {
+        "After a Grand Prix, the race was over — but the journey wasn’t.",
+        "Formula 1 drivers Charles Leclerc and Carlos Sainz were heading home together.",
+        "Bad weather shut down private flights.",
+        "No jets. No shortcuts.",
+        "So they did the unexpected.",
+        "They rented a van and took the road instead.",
+        "Later, they learned another driver’s jet landed safely at the same time.",
+        "Charles Leclerc shared the moment on Instagram.",
+        "That story became the spark for this game."
+    };
+
+    private readonly string[] storyLines2 =
     {
         "You are a professional racing driver.",
         "The Grand Prix is over, but the journey home has just begun.",
@@ -27,24 +40,34 @@ public class IntroSceneController : MonoBehaviour
         "The road never ends.",
         "One mistake ends the journey.",
         "How far can you drive before the streets claim the car?"
-    };*/
-    private readonly string[] storyLines =
-    {
-        "You are a professional racing driver.",
-        "The Grand Prix is over, but the journey home has just begun.",
-        
     };
+    
+    private int currentTextBlock = 0;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
         canvasGroup.alpha = 0f;
-        StartCoroutine(PlayIntro());
+
+        introFlowController.OnTextBlockRequested += PlayTextBlock;
     }
 
-    private IEnumerator PlayIntro()
+    public void PlayTextBlock(int blockIndex)
     {
-        foreach (var line in storyLines)
+        StopAllCoroutines(); // safety
+
+        canvasGroup.alpha = 1f;
+        canvasGroup.gameObject.SetActive(true);
+
+        if (blockIndex == 0)
+            StartCoroutine(PlayIntro(storyLines1));
+        else if (blockIndex == 1)
+            StartCoroutine(PlayIntro(storyLines2));
+    }
+
+
+    private IEnumerator PlayIntro(string[] lines)
+    {
+        foreach (var line in lines)
         {
             storyText.text = line;
 
@@ -52,6 +75,8 @@ public class IntroSceneController : MonoBehaviour
             yield return new WaitForSeconds(visibleTime);
             yield return Fade(1f, 0f, fadeOutTime);
         }
+
+        // Notify IntroFlowController that this text block is finished
         introFlowController.OnTextFinished();
     }
 
@@ -61,7 +86,7 @@ public class IntroSceneController : MonoBehaviour
 
         canvasGroup.alpha = from;
 
-        while(elapsed < duration)
+        while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             canvasGroup.alpha = Mathf.Lerp(from, to, elapsed / duration);
@@ -69,5 +94,11 @@ public class IntroSceneController : MonoBehaviour
         }
 
         canvasGroup.alpha = to;
+    }
+
+    void OnDestroy()
+    {
+        if (introFlowController != null)
+            introFlowController.OnTextBlockRequested -= PlayTextBlock;
     }
 }

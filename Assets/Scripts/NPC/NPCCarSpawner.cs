@@ -4,92 +4,132 @@ using UnityEngine;
 public class NPCCarSpawner : MonoBehaviour
 {
     [SerializeField] GameObject[] carNpcPrefabs;
-
-    private GameObject[] carNpcPool = new GameObject[20];
-    private Transform playerCarTransform;
-
-    //Timing
-    private float timeLastCarSpawned = 0;
-    private WaitForSeconds wait = new WaitForSeconds(0.5f);
-
-    //Overlapped check
     [SerializeField] LayerMask otherCarsLayerMask;
-    private Collider[] overlappedCheckCollider = new Collider[1];
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Header("Pool")]
+    [SerializeField] int poolSize = 20;
+
+    [Header("Spawning")]
+    [SerializeField] float minSpawnDistance = 30f;
+    [SerializeField] float maxSpawnDistance = 80f;
+    [SerializeField] float minDistanceBetweenCars = 25f;
+    [SerializeField] int minCarsAhead = 3;
+
+    private GameObject[] carNpcPool;
+    private Transform playerCarTransform;
+    private Rigidbody playerRb;
+
+    private WaitForSeconds wait = new WaitForSeconds(0.5f);
+    private Collider[] overlapResults = new Collider[1];
+
     void Start()
     {
         playerCarTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerRb = playerCarTransform.GetComponent<Rigidbody>();
+
+        carNpcPool = new GameObject[poolSize];
 
         int prefabIndex = 0;
-
-        for(int i = 0; i < carNpcPool.Length; i++)
+        for (int i = 0; i < poolSize; i++)
         {
             carNpcPool[i] = Instantiate(carNpcPrefabs[prefabIndex]);
             carNpcPool[i].SetActive(false);
 
             prefabIndex++;
-
-            if (prefabIndex > carNpcPrefabs.Length - 1)
+            if (prefabIndex >= carNpcPrefabs.Length)
                 prefabIndex = 0;
         }
 
-        StartCoroutine(UpdateLessOftenCO());
+        StartCoroutine(UpdateTrafficCO());
     }
 
-    private IEnumerator UpdateLessOftenCO()
+    IEnumerator UpdateTrafficCO()
     {
-        while(true)
+        while (true)
         {
-            CleanUpCarsBeyondView();
-            SpawnNewCars();
-
+            CleanUpCars();
+            MaintainTrafficAhead();
             yield return wait;
         }
     }
 
-    private void SpawnNewCars()
+    void MaintainTrafficAhead()
     {
-        if (Time.time - timeLastCarSpawned < 2)
-            return;
+        float playerZ = playerCarTransform.position.z;
+        float playerSpeed = Mathf.Max(0f, playerRb.linearVelocity.z);
 
-        GameObject carToSpawn = null;
+        float dynamicSpawnDistance = Mathf.Lerp(
+            minSpawnDistance,
+            maxSpawnDistance,
+            playerSpeed / 50f
+        );
 
-        //Find a car to spawn
-        foreach (GameObject npcCar in carNpcPool)
+        int carsAhead = 0;
+        float furthestCarZ = playerZ;
+
+        foreach (GameObject car in carNpcPool)
         {
-            if (npcCar.activeInHierarchy)
+            if (!car.activeInHierarchy)
                 continue;
 
-            carToSpawn = npcCar;
-            break;
+            float z = car.transform.position.z;
+
+            if (z > playerZ)
+                carsAhead++;
+
+            if (z > furthestCarZ)
+                furthestCarZ = z;
+        }
+
+        if (carsAhead < minCarsAhead || furthestCarZ - playerZ < dynamicSpawnDistance)
+        {
+            SpawnCarAt(furthestCarZ + minDistanceBetweenCars);
+        }
+    }
+
+    void SpawnCarAt(float zPos)
+    {
+        GameObject carToSpawn = null;
+
+        foreach (GameObject car in carNpcPool)
+        {
+            if (!car.activeInHierarchy)
+            {
+                carToSpawn = car;
+                break;
+            }
         }
 
         if (carToSpawn == null)
             return;
-        Vector3 spawnPosition = new Vector3(0, 0, playerCarTransform.position.z + 40);
 
-        if (Physics.OverlapBoxNonAlloc(spawnPosition, Vector3.one * 2, overlappedCheckCollider, Quaternion.identity, otherCarsLayerMask) > 0)
+        Vector3 spawnPos = new Vector3(0f, 0f, zPos);
+
+        if (Physics.OverlapBoxNonAlloc(
+            spawnPos,
+            Vector3.one * 2f,
+            overlapResults,
+            Quaternion.identity,
+            otherCarsLayerMask) > 0)
             return;
 
-        carToSpawn.transform.position = spawnPosition;
+        carToSpawn.transform.position = spawnPos;
         carToSpawn.SetActive(true);
-
-        timeLastCarSpawned = Time.time;
     }
 
-    private void CleanUpCarsBeyondView()
+    void CleanUpCars()
     {
-        foreach (GameObject npcCar in carNpcPool)
+        float playerZ = playerCarTransform.position.z;
+
+        foreach (GameObject car in carNpcPool)
         {
-            if (!npcCar.activeInHierarchy)
+            if (!car.activeInHierarchy)
                 continue;
 
-            if (npcCar.transform.position.z - playerCarTransform.position.z > 200)
-                npcCar.SetActive(false);
+            float dz = car.transform.position.z - playerZ;
 
-            if (npcCar.transform.position.z - playerCarTransform.position.z < -50)
-                npcCar.SetActive(false);
+            if (dz > 220f || dz < -60f)
+                car.SetActive(false);
         }
     }
 }
