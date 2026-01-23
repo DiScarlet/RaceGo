@@ -45,4 +45,10 @@ public class NavigationHandler : MonoBehaviour
             Application.Quit();
         #endif
     }
+
+    private void OnDestroy()
+    {
+        UIHandler.MainMenuClicked -= OnMainMenuClick;
+        UIHandler.RestartClicked -= OnQuickStartClick;
+    }
 }
